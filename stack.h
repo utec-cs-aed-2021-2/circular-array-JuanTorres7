@@ -4,16 +4,37 @@
 template <typename T>
 class StackArray : public CircularArray<T> {
 private:
-    unique_ptr<T[]> cA;
-    int head, size=0;
+    T *array_s;
+    T capacity_s;
+    T top;
 public:
-    StackArray(T size) : CircularArray<T>(make_unique<T[]>(size)), size(size) {}
-    void push (T data) {
-        cA[head] = data;
-        head = (head+1) % size;
+    StackArray(int _size) {
+        array_s = new T[_size];
+        capacity_s = _size;
+        top = -1;
     }
-    T pop() {
-        head = (head-1+size)%size;
-        return cA[head];
-    }
+    void push (T data);
+    T pop ();
+    bool isEmpty();
+    bool isFull();
 };
+
+template <typename T>
+void StackArray<T>::push(T data) {
+    array_s[++top] = data;
+}
+
+template <typename T>
+T StackArray<T>::pop() {
+    return array_s[top--];
+}
+
+template <typename T>
+bool StackArray<T>::isEmpty() {
+    return top == -1;
+}
+
+template <typename T>
+bool StackArray<T>::isFull() {
+    return top == capacity_s-1;
+}
